@@ -1,0 +1,48 @@
+# Pipeline Plugin for Claude Code
+
+Risk-routed multi-phase agent pipeline with empirical-first verification.
+
+## Install
+
+```bash
+/install-plugin https://github.com/2hyunbin/pipeline-plugin
+```
+
+## What It Does
+
+Classifies task risk (HIGH/MEDIUM/LOW) by domain analysis, then routes through phases with controls proportional to stakes:
+
+```
+HIGH   → Clarify → Plan (full) → Execute (full)     [CCG, User Gates]
+MEDIUM → Clarify → Plan (lite) → Execute (lite)     [single judge, 1 Gate]
+LOW    → Execute + empirical verification only
+```
+
+## Key Features
+
+- **Empirical-first verification** — tests/build/lint before any LLM judgment
+- **Domain research** — auto-fetches best practices (OWASP, migration checklists, etc.)
+- **Assumption tracking** — structured lifecycle (PENDING → CONFIRMED → INVALIDATED)
+- **BACKTRACK** — when assumptions break, rewind to affected phase only
+- **HALT protocol** — fail-closed on cap exhaustion or CCG unavailable + HIGH
+- **CCG attenuation guard** — prevents information loss during multi-model synthesis
+- **LoopGuard** — defends against 4 loop pathologies with 5 tracked metrics
+
+## Architecture
+
+```
+SKILL.md (orchestrator, 88 lines)
+  ├── Phase 0: Risk Routing          → pipeline-risk-analyzer agent
+  ├── Phase 1: Clarify               → dimension-targeted questioning
+  ├── Phase 2: Plan + Verify         → pipeline-domain-researcher + pipeline-ccg-reviewer
+  ├── Phase 3: Execute + Review      → pipeline-empirical-verifier + pipeline-ccg-reviewer
+  └── Cross-cutting                  → pipeline-assumption-tracker
+```
+
+## Design Origin
+
+Designed through 3 rounds of tri-model (Codex GPT-5.4 + Gemini + Claude Opus) adversarial review. Final grades: Codex A-, Gemini A, Claude B+. Key insight discovered during the process: **Iterative Synthesis Attenuation** — multi-model review loops structurally lose "merge/transform" recommendations, which the attenuation guard addresses.
+
+## License
+
+MIT

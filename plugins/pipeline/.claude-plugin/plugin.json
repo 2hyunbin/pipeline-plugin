@@ -1,0 +1,10 @@
+{
+  "name": "pipeline",
+  "description": "Risk-routed AI agent pipeline — classifies task risk (HIGH/MEDIUM/LOW), then orchestrates Clarify → Plan → Execute with controls proportional to stakes. Features empirical-first verification, HALT protocol, AC versioning, backtrack recovery, and CCG adversarial review with attenuation guard.",
+  "author": {
+    "name": "2hyunbin",
+    "url": "https://github.com/2hyunbin"
+  },
+  "repository": "https://github.com/2hyunbin/pipeline-plugin",
+  "license": "MIT"
+}

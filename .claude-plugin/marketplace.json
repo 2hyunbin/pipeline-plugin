@@ -1,0 +1,14 @@
+{
+  "name": "pipeline-plugin",
+  "owner": {
+    "name": "2hyunbin"
+  },
+  "plugins": [
+    {
+      "name": "pipeline",
+      "source": "./plugins/pipeline",
+      "description": "Risk-routed multi-phase agent pipeline with empirical-first verification, backtrack recovery, and adversarial CCG review.",
+      "version": "0.1.0"
+    }
+  ]
+}
