@@ -52,7 +52,7 @@ HALT is a fail-closed terminal state. The agent stops all work and waits for hum
 | Option | What Happens |
 |---|---|
 | **(a) Reset + resume** | Reset backtrack counter to 0. Resume from current phase with existing state. |
-| **(b) Reduce scope** | User specifies what to cut. Agent updates AC (version bump + Change Log), then resumes from Phase 2. |
+| **(b) Reduce scope** | Reset backtrack counter to 0. User specifies what to cut. Agent updates AC (version bump + Change Log), then resumes from Phase 2. |
 | **(c) Abandon** | Agent runs cleanup: `state_write(mode: "pipeline", state: { status: "abandoned" })`. No further action. |
 
 ## Anti-patterns

@@ -39,10 +39,6 @@ SKILL.md (orchestrator, 88 lines)
   └── Cross-cutting                  → pipeline-assumption-tracker
 ```
 
-## Design Origin
-
-Designed through 3 rounds of tri-model (Codex GPT-5.4 + Gemini + Claude Opus) adversarial review. Final grades: Codex A-, Gemini A, Claude B+. Key insight discovered during the process: **Iterative Synthesis Attenuation** — multi-model review loops structurally lose "merge/transform" recommendations, which the attenuation guard addresses.
-
 ## License
 
 MIT
