@@ -1,5 +1,9 @@
 # Phase 3: Execute + Review
 
+**This phase is now a standalone skill: `pipeline-execute`.** This reference doc is kept for architectural context.
+
+Invoke via `Skill("pipeline-execute")` for the authoritative execution instructions.
+
 Goal: Implement plan, verify against AC + domain checklist, detect drift and escalation.
 
 ## Execution

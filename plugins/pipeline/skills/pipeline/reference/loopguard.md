@@ -18,8 +18,7 @@ Based on agentpatterns.tech's LoopGuard pattern + Anthropic's evaluator-optimize
 | `steps_per_phase` | Phase 1: 5, Phase 2: 3, Phase 3: 5 | HALT + report |
 | `repeated_tool_rate` | >3 identical tool+args in a phase | Block repetition, force alternative |
 | `no_progress_steps` | 3 consecutive steps without new facts or file changes | Escalate to user or BACKTRACK |
-| `tokens_per_phase` | Handoff output limits (see SKILL.md) | Truncate with priority order |
-| `backtrack_count` | HIGH: 3, MEDIUM: 2 | HALT + human review |
+| `backtrack_count` | 3 | HALT + human review |
 
 ## Progressive Escalation
 

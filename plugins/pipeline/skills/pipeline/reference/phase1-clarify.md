@@ -75,8 +75,7 @@ On approval:
 
 ## Handoff → Phase 2
 
-≤1K tokens:
-- Decisions made
-- Open items
-- Active assumptions (with status)
+Update state and invoke `Skill("pipeline-plan")`. The state carries:
 - AC version + file path
+- Active assumptions (with status)
+- Decisions made during clarification
