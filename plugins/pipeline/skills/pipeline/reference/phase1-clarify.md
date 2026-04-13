@@ -2,7 +2,7 @@
 
 Goal: Replace ambiguity with versioned, user-approved acceptance criteria.
 
-Adapted from deep-interview's dimension-targeted questioning, but lightweight: default 1-2 rounds, not 20.
+Adapted from deep-interview's dimension-targeted questioning. Iterates until ambiguity is resolved, not a fixed round count.
 
 ## Skip Conditions
 
@@ -14,26 +14,31 @@ Adapted from deep-interview's dimension-targeted questioning, but lightweight: d
 
 ### 1. Score Ambiguity
 
-Rate 4 dimensions (0.0 = clear, 1.0 = opaque):
+Rate 5 dimensions (0.0 = clear, 1.0 = opaque):
 
-| Dimension | Probing Question |
-|---|---|
-| **Scope** | What's included/excluded? |
-| **Acceptance Criteria** | How do we know it's done? |
-| **Edge Cases** | What exceptions exist? |
-| **Dependencies** | What does this depend on? |
+| Dimension | Probing Question | Origin |
+|---|---|---|
+| **Goal** | Why are we doing this? What problem does it solve? | Systems Ambiguity: task + expectation |
+| **Scope** | What's included/excluded? How far does the change reach? | IEEE 830: complete |
+| **Constraints** | What must NOT break? Compatibility, performance, API stability? | Systems Ambiguity: exception; LLM Instruction Ambiguity: critical |
+| **Outcome** | How do we verify it's correct? What does "done" look like? | IEEE 830: verifiable/testable |
+| **Approach** | Are there preferred methods, patterns, or tools? | Systems Ambiguity: method; LLM Instruction Ambiguity: procedural |
 
-### 2. Targeted Questioning
+### 2. Iterative Questioning
+
+Loop until all dimensions score ≤ 0.3 (safety cap: 10 rounds):
 
 - Ask ONE question at a time (never batch)
 - Target the dimension with the HIGHEST ambiguity score
 - Gather codebase facts via explore agent BEFORE asking user about them
-- Default: 1-2 rounds resolve most ambiguity
-- Add rounds only if critical items remain unanswered (max 5 hard cap)
+- After each answer, re-score ALL 5 dimensions and show updated scores
+- Primary exit condition: all dimensions ≤ 0.3
+- Safety cap: 10 rounds — generate best-effort AC, flag remaining ambiguity
+- User override: "just do it" / "skip" → exit immediately
 
-### 3. Perspective Shift (round 4+ only)
+### 3. Perspective Shift (round 5+ only)
 
-If ambiguity persists at round 4, inject contrarian perspective:
+If ambiguity persists at round 5, inject contrarian perspective:
 - "What if the opposite assumption is true?"
 - "What's the simplest version that would still be useful?"
 - Not a separate agent — a prompt-level perspective shift

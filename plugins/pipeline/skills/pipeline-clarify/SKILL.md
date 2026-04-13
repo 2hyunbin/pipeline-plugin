@@ -25,26 +25,38 @@ Skip this phase and invoke `Skill("pipeline-plan")` directly if:
 
 ### 1. Score Ambiguity
 
-Rate 4 dimensions (0.0 = clear, 1.0 = opaque):
+Rate 5 dimensions (0.0 = clear, 1.0 = opaque):
 
-| Dimension | Probing Question |
-|---|---|
-| **Scope** | What's included/excluded? |
-| **Acceptance Criteria** | How do we know it's done? |
-| **Edge Cases** | What exceptions exist? |
-| **Dependencies** | What does this depend on? |
+| Dimension | Probing Question | Origin |
+|---|---|---|
+| **Goal** | Why are we doing this? What problem does it solve? | Systems Ambiguity: task + expectation |
+| **Scope** | What's included/excluded? How far does the change reach? | IEEE 830: complete |
+| **Constraints** | What must NOT break? Compatibility, performance, API stability? | Systems Ambiguity: exception; LLM Instruction Ambiguity: critical |
+| **Outcome** | How do we verify it's correct? What does "done" look like? | IEEE 830: verifiable/testable |
+| **Approach** | Are there preferred methods, patterns, or tools? | Systems Ambiguity: method; LLM Instruction Ambiguity: procedural |
 
-### 2. Targeted Questioning
+### 2. Iterative Questioning
 
-- Ask **ONE question at a time** (never batch)
-- Target the dimension with the HIGHEST ambiguity score
-- Gather codebase facts via explore agent BEFORE asking user about them
-- Default: 1-2 rounds resolve most ambiguity
-- Add rounds only if critical items remain unanswered (max 5 hard cap)
+Loop until all dimensions score ≤ 0.3 (safety cap: 10 rounds):
 
-### 3. Perspective Shift (round 4+ only)
+```
+round = 0
+while max(ambiguity_scores) > 0.3 and round < 10:
+    1. Pick dimension with HIGHEST score
+    2. Gather codebase facts via explore agent BEFORE asking user
+    3. Ask ONE question targeting that dimension (never batch)
+    4. Re-score ALL 5 dimensions based on answer
+    5. Show updated scores to user
+    round += 1
+```
 
-If ambiguity persists at round 4, inject contrarian perspective:
+- **Primary exit condition**: all dimensions ≤ 0.3
+- **Safety cap**: 10 rounds — if hit, generate best-effort AC and flag remaining ambiguity
+- If user says "just do it" / "skip" → exit loop immediately, carry unresolved ambiguity into AC assumptions
+
+### 3. Perspective Shift (round 5+ only)
+
+If ambiguity persists at round 5, inject contrarian perspective:
 - "What if the opposite assumption is true?"
 - "What's the simplest version that would still be useful?"
 
@@ -95,12 +107,13 @@ Save AC file to `.pipeline/{task_id}/ac-v1.md`.
 ```
 
 <Escalation_And_Stop_Conditions>
-- Max 5 questioning rounds — if still unclear, generate best-effort AC and flag uncertainties
-- If user says "just do it" / "skip" → write minimal AC and chain to pipeline-plan
+- Primary exit: all ambiguity dimensions ≤ 0.3
+- Safety cap: 10 rounds — generate best-effort AC and flag remaining uncertainties as assumptions
+- User override: "just do it" / "skip" → write minimal AC with unresolved dimensions noted, chain to pipeline-plan
 </Escalation_And_Stop_Conditions>
 
 <Final_Checklist>
-- [ ] Ambiguity scored across 4 dimensions
+- [ ] Ambiguity scored across 5 dimensions (Goal, Scope, Constraints, Outcome, Approach)
 - [ ] Codebase facts gathered before asking user
 - [ ] AC has testable criteria only (no vague items)
 - [ ] Assumptions listed with status
