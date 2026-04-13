@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Risk-routed multi-phase agent pipeline for Claude Code",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {
@@ -16,7 +16,7 @@
         "url": "https://github.com/2hyunbin/pipeline-plugin.git"
       },
       "description": "Risk-routed multi-phase agent pipeline with empirical-first verification, backtrack recovery, and adversarial CCG review.",
-      "version": "0.1.0"
+      "version": "0.2.0"
     }
   ]
 }
