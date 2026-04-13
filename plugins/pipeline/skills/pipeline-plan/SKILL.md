@@ -13,7 +13,7 @@ Research domain standards, generate plan with alternatives, verify empirically t
 
 Read pipeline state before starting:
 ```
-state_read(mode: "pipeline")
+Read(".pipeline/state.json")
 ```
 Verify `status: "active"`. Read `task_summary`, `ac_path`, `assumptions`.
 
@@ -42,7 +42,7 @@ If 3 iterations without PASS → HALT with best version + failure summary.
 
 On **re-entry from failed verification**: only re-run if feedback indicates checklist gaps. Otherwise skip to Step 2 with existing checklist.
 
-1. Update state: `state_write(mode: "pipeline", state: { current_phase: "2-research" })`
+1. Update state: `Read(".pipeline/state.json")` → set `current_phase: "2-research"` → `Write(".pipeline/state.json", <updated>)`
 2. Identify task domain(s) from AC + codebase exploration
 3. **Spawn `pipeline-domain-researcher` agent** with task summary + AC as input:
    - Agent queries Context7 or WebSearch for domain best practices
@@ -50,8 +50,8 @@ On **re-entry from failed verification**: only re-run if feedback indicates chec
      - AC = "what to achieve" (user-defined outcomes)
      - Checklist = "what standards to meet" (industry-sourced criteria)
 4. **WAIT for agent completion.** Read the checklist output.
-5. Save checklist to `.omc/pipeline/{task_id}/checklist.md`
-6. Update state: `state_write(mode: "pipeline", state: { checklist_path: ".omc/pipeline/{task_id}/checklist.md" })`
+5. Save checklist to `.pipeline/{task_id}/checklist.md`
+6. Update state: `Read(".pipeline/state.json")` → set `checklist_path: ".pipeline/{task_id}/checklist.md"` → `Write(".pipeline/state.json", <updated>)`
 7. **User Gate:** present checklist via `AskUserQuestion`:
    - **Approve** → proceed to Step 2
    - **Request changes** → revise and re-present (max 3 sub-rounds)
@@ -65,7 +65,7 @@ On **re-entry from failed verification**: only re-run if feedback indicates chec
 On **re-entry from failed verification**: incorporate CCG/Critic feedback into revised plan. Do NOT start from scratch — iterate on previous version.
 
 1. Verify: `checklist_path` is set and file exists. If not → HALT.
-2. Update state: `state_write(mode: "pipeline", state: { current_phase: "2-plan" })`
+2. Update state: `Read(".pipeline/state.json")` → set `current_phase: "2-plan"` → `Write(".pipeline/state.json", <updated>)`
 3. **Spawn Explore agent** to map implementation surface in codebase
 4. Generate **2-3 plan alternatives** with pros/cons, informed by domain checklist
 5. **Select** best alternative with rationale
@@ -84,15 +84,15 @@ On **re-entry from failed verification**: incorporate CCG/Critic feedback into r
 3. If Critic REJECT → revise plan → return to sub-step 1 (max 3 rounds)
 4. If 3 rounds without approval → proceed with best version + flag concerns
 
-9. Save plan to `.omc/pipeline/{task_id}/plan.md`
-10. Update state: `state_write(mode: "pipeline", state: { plan_path: ".omc/pipeline/{task_id}/plan.md" })`
+9. Save plan to `.pipeline/{task_id}/plan.md`
+10. Update state: `Read(".pipeline/state.json")` → set `plan_path: ".pipeline/{task_id}/plan.md"` → `Write(".pipeline/state.json", <updated>)`
 
 **Artifact gate:** `plan_path` MUST be non-null and file MUST exist before Step 3.
 
 ## Step 3: Verify — BLOCKED until plan artifact exists
 
 1. Verify: `plan_path` is set and file exists. If not → HALT.
-2. Update state: `state_write(mode: "pipeline", state: { current_phase: "2-verify" })`
+2. Update state: `Read(".pipeline/state.json")` → set `current_phase: "2-verify"` → `Write(".pipeline/state.json", <updated>)`
 
 ### Empirical Verification
 
@@ -123,9 +123,9 @@ Log feedback in state for next iteration to read.
 ## Chain to Next Phase
 
 After verification passes:
-```
-state_write(mode: "pipeline", state: { current_phase: "2" })
-```
+
+`Read(".pipeline/state.json")` → set `current_phase: "2"` → `Write(".pipeline/state.json", <updated>)`
+
 **Invoke immediately:** `Skill("pipeline-execute")`
 
 <Escalation_And_Stop_Conditions>

@@ -11,7 +11,7 @@ Implement plan, verify against AC + domain checklist, detect drift.
 
 Read pipeline state before starting:
 ```
-state_read(mode: "pipeline")
+Read(".pipeline/state.json")
 ```
 
 - Verify `plan_path` is set and file exists — read the plan
@@ -19,7 +19,7 @@ state_read(mode: "pipeline")
 - Verify `ac_path` is set and file exists — read the acceptance criteria
 - If any artifact is missing → HALT with "Phase 2 incomplete"
 
-Update state: `state_write(mode: "pipeline", state: { current_phase: "3" })`
+Update state: `Read(".pipeline/state.json")` → set `current_phase: "3"` → `Write(".pipeline/state.json", <updated>)`
 
 ## Execution
 
@@ -94,12 +94,7 @@ After CCG review passes:
 
 After all stories verified and review passed:
 
-```
-state_write(mode: "pipeline", state: {
-  status: "completed",
-  current_phase: "3"
-})
-```
+`Read(".pipeline/state.json")` → set `status: "completed"`, `current_phase: "3"` → `Write(".pipeline/state.json", <updated>)`
 
 Report to user:
 - Summary of what was implemented
@@ -107,11 +102,11 @@ Report to user:
 - Domain checklist pass/fail status
 - Any open risks or follow-ups
 
-Clean up via `/oh-my-claudecode:cancel` or let user decide.
+Report completion to user.
 
 <Escalation_And_Stop_Conditions>
 - HALT trigger → immediate stop, report to user
-- "stop" / "cancel" / "abort" → clean exit via /oh-my-claudecode:cancel
+- "stop" / "cancel" / "abort" → update state to `status: "abandoned"` and stop
 - Same error 3x → fundamental issue, report
 - Backtrack cap exhausted → HALT
 - CCG unavailable → HALT

@@ -6,7 +6,7 @@ argument-hint: "[--skip-clarify] <task description>"
 
 # Pipeline — Entry Point
 
-This skill initializes the pipeline and immediately starts **Phase 1: Clarify**.
+This skill initializes pipeline state and routes to the appropriate phase skill.
 
 Use this when a task needs structured planning before execution. For simple tasks, just do them directly.
 
@@ -14,18 +14,20 @@ Use this when a task needs structured planning before execution. For simple task
 
 1. Initialize state:
    ```
-   state_write(mode: "pipeline", state: {
-     task_id: "<generate>",
-     current_phase: "0",
-     backtrack_count: 0,
-     status: "active",
-     task_summary: "<1-2 sentence task description>",
-     ac_version: null,
-     checklist_path: null,
-     plan_path: null
+   Write(".pipeline/state.json", {
+     "task_id": "<generate>",
+     "current_phase": "0",
+     "backtrack_count": 0,
+     "status": "active",
+     "task_summary": "<1-2 sentence task description>",
+     "ac_version": null,
+     "ac_path": null,
+     "checklist_path": null,
+     "plan_path": null,
+     "assumptions": []
    })
    ```
-2. **Route immediately:**
+2. Route:
    - Default → `Skill("pipeline-clarify")`
    - `--skip-clarify` → `Skill("pipeline-plan")`
 

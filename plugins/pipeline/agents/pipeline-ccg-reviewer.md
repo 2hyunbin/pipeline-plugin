@@ -31,21 +31,22 @@ Do NOT give all models the same prompt. Assign structurally different reasoning 
 
 Adapt the specific focus based on what's being reviewed (plan vs code vs test).
 
-## 3. Invoke Advisors
+## 3. Invoke External Advisors
 
-```bash
-omc ask codex "<skeptic prompt with artifact>"
-omc ask gemini "<pragmatist prompt with artifact>"
-```
+Send each role-differentiated prompt to the corresponding external model:
+- **Codex**: skeptic prompt + artifact
+- **Gemini**: pragmatist prompt + artifact
+
+Invocation method depends on available tooling (CLI, API, MCP, etc.). Use whatever is configured in the environment.
 
 If one is unavailable: continue with available + note missing perspective.
 If both unavailable + HIGH risk: **HALT** — do not self-review.
 
-**CCG availability:** 30s timeout + 1 retry failure = unavailable.
+**Availability check:** 30s timeout + 1 retry failure = unavailable.
 
-## 4. Collect & Read Artifacts
+## 4. Collect Advisor Responses
 
-Read from `.omc/artifacts/ask/codex-*.md` and `.omc/artifacts/ask/gemini-*.md`.
+Read each advisor's response output. Format/location depends on invocation method used in Step 3.
 
 ## 5. Synthesize with Disagreement Preservation
 

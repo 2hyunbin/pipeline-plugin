@@ -14,15 +14,7 @@ HALT is a fail-closed terminal state. The agent stops all work and waits for hum
 ## On HALT
 
 1. **Record state:**
-   ```
-   state_write(mode: "pipeline", state: {
-     status: "halted",
-     halt_reason: "<specific reason>",
-     current_phase: <N>,
-     backtrack_count: <N>,
-     // ... all other fields preserved
-   })
-   ```
+   `Read(".pipeline/state.json")` → set `status: "halted"`, `halt_reason: "<specific reason>"` (preserve all other fields) → `Write(".pipeline/state.json", <updated>)`
 
 2. **Checkpoint:** save full task record snapshot
 
@@ -53,7 +45,7 @@ HALT is a fail-closed terminal state. The agent stops all work and waits for hum
 |---|---|
 | **(a) Reset + resume** | Reset backtrack counter to 0. Resume from current phase with existing state. |
 | **(b) Reduce scope** | Reset backtrack counter to 0. User specifies what to cut. Agent updates AC (version bump + Change Log), then resumes from Phase 2. |
-| **(c) Abandon** | Agent runs cleanup: `state_write(mode: "pipeline", state: { status: "abandoned" })`. No further action. |
+| **(c) Abandon** | Agent runs cleanup: `Read(".pipeline/state.json")` → set `status: "abandoned"` → `Write(".pipeline/state.json", <updated>)`. No further action. |
 
 ## Anti-patterns
 

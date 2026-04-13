@@ -9,9 +9,9 @@ Replace ambiguity with versioned, user-approved acceptance criteria (AC).
 
 ## Prerequisites
 
-Read pipeline state before starting:
+Read pipeline state:
 ```
-state_read(mode: "pipeline")
+Read(".pipeline/state.json")
 ```
 Verify `status: "active"` and `current_phase: "0"`. If not, HALT — phase sequencing error.
 
@@ -77,16 +77,11 @@ On approval: AC becomes baseline (v1). Future changes require Change Log + User 
 ### 6. Update State and Chain
 
 **MUST update state before chaining:**
-```
-state_write(mode: "pipeline", state: {
-  current_phase: "1",
-  ac_version: "v1",
-  ac_path: ".omc/pipeline/{task_id}/ac-v1.md",
-  assumptions: [...]
-})
-```
+1. `Read(".pipeline/state.json")` to get current state
+2. Update fields: `current_phase: "1"`, `ac_version: "v1"`, `ac_path: ".pipeline/{task_id}/ac-v1.md"`, `assumptions: [...]`
+3. `Write(".pipeline/state.json", <updated state>)`
 
-Save AC file to `.omc/pipeline/{task_id}/ac-v1.md`.
+Save AC file to `.pipeline/{task_id}/ac-v1.md`.
 
 **Then immediately invoke:** `Skill("pipeline-plan")`
 

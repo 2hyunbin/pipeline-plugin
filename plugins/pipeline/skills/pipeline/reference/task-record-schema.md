@@ -1,6 +1,6 @@
 # Canonical Task Record Schema
 
-Single source of truth for the pipeline. Stored at `.omc/pipeline/{task_id}/record.json`.
+Single source of truth for the pipeline. Stored at `.pipeline/{task_id}/record.json`.
 
 ```json
 {
@@ -13,13 +13,13 @@ Single source of truth for the pipeline. Stored at `.omc/pipeline/{task_id}/reco
   "ac_versions": [
     {
       "version": "v1",
-      "content_path": ".omc/pipeline/{task_id}/ac-v1.md",
+      "content_path": ".pipeline/{task_id}/ac-v1.md",
       "approved_at": "ISO timestamp",
       "change_log": null
     },
     {
       "version": "v1.1",
-      "content_path": ".omc/pipeline/{task_id}/ac-v1.1.md",
+      "content_path": ".pipeline/{task_id}/ac-v1.1.md",
       "approved_at": "ISO timestamp",
       "change_log": "BACKTRACK: discovered OAuth2 requirement in Phase 3"
     }
@@ -35,7 +35,7 @@ Single source of truth for the pipeline. Stored at `.omc/pipeline/{task_id}/reco
     }
   ],
 
-  "domain_checklist_path": ".omc/pipeline/{task_id}/checklist.md",
+  "domain_checklist_path": ".pipeline/{task_id}/checklist.md",
 
   "plan_choice": "Description of selected plan alternative",
   "rejected_alternatives": [
