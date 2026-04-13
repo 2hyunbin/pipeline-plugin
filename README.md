@@ -5,11 +5,9 @@ Risk-routed multi-phase agent pipeline with empirical-first verification.
 ## Install
 
 ```bash
-# Clone into your Claude Code plugins directory
-git clone https://github.com/2hyunbin/pipeline-plugin.git ~/.claude/plugins/pipeline-plugin
+/install-marketplace https://github.com/2hyunbin/pipeline-plugin
+/install pipeline@pipeline-plugin
 ```
-
-Or manually copy the `plugins/pipeline` directory into your project's `.claude/plugins/` folder.
 
 ## What It Does
 

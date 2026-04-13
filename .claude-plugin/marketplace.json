@@ -1,12 +1,20 @@
 {
   "name": "pipeline-plugin",
   "owner": {
-    "name": "2hyunbin"
+    "name": "2hyunbin",
+    "url": "https://github.com/2hyunbin"
+  },
+  "metadata": {
+    "description": "Risk-routed multi-phase agent pipeline for Claude Code",
+    "version": "0.1.0"
   },
   "plugins": [
     {
       "name": "pipeline",
-      "source": "./plugins/pipeline",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/2hyunbin/pipeline-plugin.git"
+      },
       "description": "Risk-routed multi-phase agent pipeline with empirical-first verification, backtrack recovery, and adversarial CCG review.",
       "version": "0.1.0"
     }
