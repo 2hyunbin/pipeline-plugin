@@ -5,7 +5,8 @@ Risk-routed multi-phase agent pipeline with empirical-first verification.
 ## Install
 
 ```bash
-/install-plugin https://github.com/2hyunbin/pipeline-plugin
+claude plugin marketplace add https://github.com/2hyunbin/pipeline-plugin
+claude plugin install pipeline@pipeline-plugin
 ```
 
 ## What It Does
